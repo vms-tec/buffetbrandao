@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buffet Brandão | Sabor que marca, momentos que ficam</title>
+    
+    <!-- Fontes do Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================================================
+           1. RESET & VARIÁVEIS GLOBAIS
+           ========================================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #c48b7f;      /* Rose Gold / Rose Seco */
+            --primary-dark: #a36f64;       /* Tom escuro para hover */
+            --gold-accent: #d4af37;        /* Dourado elegante */
+            --bg-light: #fcf8f6;           /* Fundo creme suave */
+            --bg-card: #ffffff;
+            --text-dark: #2c2221;
+            --text-muted: #665553;
+            --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1); /* Transição ultra suave */
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ==========================================================================
+           2. ANIMAÇÕES & ELEMENTOS DE REVELAÇÃO (FADE-IN)
+           ========================================================================== */
+        .highlight-word {
+            color: var(--primary-color);
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+            transition: color 0.4s ease;
+        }
+
+        .highlight-word:hover {
+            color: var(--gold-accent);
+            text-shadow: 0 0 12px rgba(212, 175, 55, 0.35);
+        }
+
+        /* Efeito de aparição suave dos cards ao rolar a página */
+        .fade-in-element {
+            opacity: 0;
+            transform: translateY(25px) scale(0.98);
+            transition: opacity 1.2s var(--transition-smooth), transform 1.2s var(--transition-smooth);
+            will-change: opacity, transform;
+        }
+
+        .fade-in-element.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* ==========================================================================
+           3. CABEÇALHO (HEADER FIXO RESPONSIVO)
+           ========================================================================== */
+        .header {
+            background-color: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 75px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: relative;
+        }
+
+        .logo-slot-header {
+            width: 55px;
+            height: 55px;
+            flex-shrink: 0;
+        }
+
+        /* MENU DE NAVEGAÇÃO DESKTOP */
+        .nav-menu {
+            display: flex;
+            gap: 22px;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            padding: 5px 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        /* BOTÃO HAMBÚRGUER (MOBILE) */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 28px;
+            height: 20px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 1100;
+            padding: 0;
+        }
+
+        .menu-toggle .bar {
+            width: 100%;
+            height: 3px;
+            background-color: var(--text-dark);
+            border-radius: 3px;
+            transition: all 0.4s var(--transition-smooth);
+        }
+
+        .menu-toggle.active .bar:nth-child(1) {
+            transform: translateY(8.5px) rotate(45deg);
+        }
+        .menu-toggle.active .bar:nth-child(2) {
+            opacity: 0;
+        }
+        .menu-toggle.active .bar:nth-child(3) {
+            transform: translateY(-8.5px) rotate(-45deg);
+        }
+
+        /* ==========================================================================
+           4. HERO SECTION & TRANSIÇÃO FLUIDA DA LOGO
+           ========================================================================== */
+        .hero {
+            padding: 130px 0 70px;
+            text-align: center;
+            background: linear-gradient(135deg, #fceee9 0%, #fcf8f6 100%);
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo-hero-wrapper {
+            margin-bottom: 25px;
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Estilo base da Logo */
+        .logo-img {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 8px 25px rgba(196, 139, 127, 0.25);
+            /* Transição ultra suave para o movimento do scroll */
+            transition: transform 0.7s var(--transition-smooth), 
+                        width 0.7s var(--transition-smooth), 
+                        height 0.7s var(--transition-smooth),
+                        box-shadow 0.7s ease,
+                        top 0.7s var(--transition-smooth),
+                        left 0.7s var(--transition-smooth);
+            will-change: transform, width, height, top, left;
+        }
+
+        /* Classe ativada no Scroll: Move o logo para o topo */
+        .logo-img.scrolled-header {
+            position: fixed;
+            top: 10px;
+            left: 5vw;
+            width: 55px;
+            height: 55px;
+            z-index: 1001;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-size: 1.35rem;
+            color: var(--primary-color);
+            font-style: italic;
+            margin-bottom: 18px;
+        }
+
+        .description {
+            max-width: 600px;
+            margin: 0 auto 30px;
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            padding: 0 10px;
+        }
+
+        /* BOTÕES */
+        .hero-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary, .btn-gold, .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 26px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-gold {
+            background-color: var(--gold-accent);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-gold:hover {
+            background-color: #c29f2e;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        /* ==========================================================================
+           5. GRELHA DE CARDS RESPONSIVOS
+           ========================================================================== */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.6rem;
+            text-align: center;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .section-desc {
+            text-align: center;
+            max-width: 650px;
+            margin: 0 auto 35px;
+            color: var(--text-muted);
+            padding: 0 15px;
+            font-size: 1rem;
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.04);
+            border: 1px solid #f2e8e6;
+            transition: transform 0.5s var(--transition-smooth), box-shadow 0.5s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 35px rgba(196, 139, 127, 0.18);
+        }
+
+        .card-img-wrapper {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            background-color: #f7ebe8;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s var(--transition-smooth);
+        }
+
+        .card:hover .card-img {
+            transform: scale(1.06);
+        }
+
+        .card-body {
+            padding: 22px;
+        }
+
+        .card-body h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.7rem;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+        }
+
+        .card-body ul {
+            list-style: none;
+        }
+
+        .card-body ul li {
+            padding: 8px 0;
+            border-bottom: 1px dashed #f0e6e4;
+            font-size: 0.92rem;
+            color: var(--text-dark);
+        }
+
+        .card-body ul li:last-child {
+            border-bottom: none;
+        }
+
+        .card-body p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* ==========================================================================
+           6. RODAPÉ & WHATSAPP
+           ========================================================================== */
+        .footer {
+            background-color: #241b1a;
+            color: #f0e6e4;
+            padding: 45px 0;
+            text-align: center;
+        }
+
+        .footer h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.9rem;
+            margin-bottom: 12px;
+            color: var(--primary-color);
+        }
+
+        .footer p {
+            font-size: 0.92rem;
+            opacity: 0.85;
+            margin-bottom: 6px;
+        }
+
+        .copyright {
+            margin-top: 20px;
+            font-size: 0.82rem;
+            opacity: 0.5;
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            width: 58px;
+            height: 58px;
+            bottom: 25px;
+            right: 25px;
+            background-color: #25d366;
+            color: #FFF;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 28px;
+            box-shadow: 0 4px 18px rgba(37, 211, 102, 0.35);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: transform 0.3s var(--transition-smooth);
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1) translateY(-3px);
+        }
+
+        /* ==========================================================================
+           7. MEDIA QUERIES (ADAPTAÇÃO PARA DISPOSITIVOS MÓVEIS)
+           ========================================================================== */
+        @media (max-width: 868px) {
+            .menu-toggle {
+                display: flex;
+            }
+
+            .header-btn {
+                display: none;
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: 75px;
+                right: 0;
+                width: 100%;
+                height: calc(100vh - 75px);
+                background-color: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(15px);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 25px;
+                transform: translateX(100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: transform 0.5s var(--transition-smooth), opacity 0.4s ease, visibility 0.5s;
+            }
+
+            .nav-menu.active {
+                transform: translateX(0);
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .nav-link {
+                font-size: 1.2rem;
+                font-weight: 600;
+            }
+
+            .hero {
+                padding: 110px 0 50px;
+            }
+
+            .logo-hero-wrapper {
+                height: 130px;
+            }
+
+            .logo-hero-wrapper .logo-img {
+                width: 130px;
+                height: 130px;
+            }
+
+            .logo-img.scrolled-header {
+                left: 18px;
+                width: 48px;
+                height: 48px;
+                top: 13px;
+            }
+
+            .hero-title {
+                font-size: 2.6rem;
+            }
+
+            .hero-buttons {
+                width: 100%;
+                flex-direction: column;
+                padding: 0 20px;
+            }
+
+            .grid-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CABEÇALHO FIXO -->
+    <header class="header" id="main-header">
+        <div class="container header-container">
+            <div class="logo-slot-header"></div>
+            
+            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir Menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+
+            <nav class="nav-menu" id="nav-menu">
+                <a href="#home" class="nav-link">Início</a>
+                <a href="#sobre" class="nav-link">Sobre</a>
+                <a href="#cardapio" class="nav-link">Cardápio</a>
+                <a href="#decoracao" class="nav-link">Decorações</a>
+                <a href="#contacto" class="nav-link">Contato</a>
+            </nav>
+
+            <a href="https://wa.me/5511983752270?text=Olá!%20Gostaria%20de%20solicitar%20um%20orçamento." target="_blank" class="btn-primary header-btn">Pedir Orçamento</a>
+        </div>
+    </header>
+
+    <!-- SECÇÃO PRINCIPAL (HERO) -->
+    <section id="home" class="hero">
+        <div class="container hero-content">
+            <div class="logo-hero-wrapper">
+                <!-- Substitua o atributo src pelo caminho da sua imagem da logo -->
+                <img src="image/logo.jpeg" alt="Buffet Brandão Logo" class="logo-img" id="main-logo">
+            </div>
+
+            <h1 class="hero-title">Buffet <span class="highlight-word">Brandão</span></h1>
+            <p class="subtitle">Sabor que <span class="highlight-word">marca</span>, momentos que <span class="highlight-word">ficam</span>.</p>
+            <p class="description">Transformamos a sua celebração num evento inesquecível com alta gastronomia, doces artesanais e decorações impecáveis.</p>
+            
+            <div class="hero-buttons">
+                <a href="https://wa.me/5511983752270?text=Olá!%20Gostaria%20de%20solicitar%20um%20orçamento." target="_blank" class="btn-gold">Falar no WhatsApp</a>
+                <a href="#cardapio" class="btn-outline">Ver Cardápio</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOBRE NÓS -->
+    <section id="sobre" class="section sobre fade-in-element">
+        <div class="container">
+            <h2 class="section-title">Sobre o <span class="highlight-word">Buffet Brandão</span></h2>
+            <p class="section-desc">Especialistas em criar experiências gastronómicas e visuais de <span class="highlight-word">alto padrão</span> para casamentos, festas corporativas, aniversários e eventos exclusivos.</p>
+        </div>
+    </section>
+
+    <!-- CARDÁPIO -->
+    <section id="cardapio" class="section cardapio">
+        <div class="container">
+            <h2 class="section-title">Nosso <span class="highlight-word">Cardápio</span></h2>
+            <p class="section-desc">Opções preparadas com ingredientes selecionados e apresentação refinada.</p>
+
+            <div class="grid-cards">
+                <div class="card fade-in-element">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&w=600&q=80" alt="Salgados Finos" class="card-img">
+                    </div>
+                    <div class="card-body">
+                        <h3>Salgados</h3>
+                        <ul>
+                            <li>Coxinha Gourmet de Frango com Catupiry</li>
+                            <li>Empada Folhada de Palmito</li>
+                            <li>Kibe Recheado com Coalhada Seca</li>
+                            <li>Croquete de Costela com Geleia de Pimenta</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card fade-in-element">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80" alt="Doces Artesanais" class="card-img">
+                    </div>
+                    <div class="card-body">
+                        <h3>Doces & Sobremesas</h3>
+                        <ul>
+                            <li>Brigadeiro Gourmet Belga ao Leite</li>
+                            <li>Copo da Felicidade de Morango e Ninho</li>
+                            <li>Mini Tartelete de Limão Siciliano</li>
+                            <li>Macarons Artesanais Variados</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card fade-in-element">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=600&q=80" alt="Pratos Quentes" class="card-img">
+                    </div>
+                    <div class="card-body">
+                        <h3>Almoço & Jantar</h3>
+                        <ul>
+                            <li>Massa Artisanal ao Molho Quatro Queijos</li>
+                            <li>Filet Mignon ao Molho Madeira</li>
+                            <li>Risoto de Cogumelos e Parmesão</li>
+                            <li>Salada Tropical Refrescante</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DECORAÇÕES -->
+    <section id="decoracao" class="section decoracao">
+        <div class="container">
+            <h2 class="section-title">Decorações <span class="highlight-word">Exclusivas</span></h2>
+            <p class="section-desc">Cenários marcantes planeados ao pormenor para o seu evento.</p>
+
+            <div class="grid-cards">
+                <div class="card fade-in-element">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=600&q=80" alt="Casamentos" class="card-img">
+                    </div>
+                    <div class="card-body">
+                        <h3>Casamentos & Noivados</h3>
+                        <p>Arranjos florais nobres, iluminação cénica e mesas postas com pura sofisticação.</p>
+                    </div>
+                </div>
+
+                <div class="card fade-in-element">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=600&q=80" alt="Aniversários" class="card-img">
+                    </div>
+                    <div class="card-body">
+                        <h3>Aniversários & 15 Anos</h3>
+                        <p>Temas personalizados, cenários fotográficos e painéis modernos com balões e neon.</p>
+                    </div>
+                </div>
+
+                <div class="card fade-in-element">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=600&q=80" alt="Corporativo" class="card-img">
+                    </div>
+                    <div class="card-body">
+                        <h3>Eventos Corporativos</h3>
+                        <p>Ambientes elegantes e funcionais concebidos para impressionar parceiros e clientes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RODAPÉ -->
+    <footer id="contacto" class="footer">
+        <div class="container footer-content">
+            <h3>Buffet Brandão</h3>
+            <p>Atendemos festas e eventos com excelência, carinho e sabor singular.</p>
+            <p>📞 WhatsApp: (11) 98375-2270 | ✉️ Contato: contacto@buffetbrandao.com</p>
+            <p class="copyright">&copy; 2026 Buffet Brandão. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- BOTÃO FLUTUANTE DO WHATSAPP -->
+    <a href="https://wa.me/5511983752270?text=Olá!%20Gostaria%20de%20solicitar%20um%20orçamento." class="whatsapp-float" target="_blank" title="Fale connosco no WhatsApp">💬</a>
+
+    <!-- JAVASCRIPT INTEGRADO -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // 1. MOVER A LOGO PARA O TOPO AO ROLAR (SCROLL)
+            const logoImg = document.getElementById('main-logo');
+            let isScrolled = false;
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 80 && !isScrolled) {
+                    logoImg.classList.add('scrolled-header');
+                    isScrolled = true;
+                } else if (window.scrollY <= 80 && isScrolled) {
+                    logoImg.classList.remove('scrolled-header');
+                    isScrolled = false;
+                }
+            }, { passive: true });
+
+            // 2. ABRIR E FECHAR MENU MOBILE
+            const menuToggle = document.getElementById('menu-toggle');
+            const navMenu = document.getElementById('nav-menu');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            menuToggle.addEventListener('click', () => {
+                menuToggle.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    menuToggle.classList.remove('active');
+                    navMenu.classList.remove('active');
+                });
+            });
+
+            // 3. APARIÇÃO SUAVE DOS CARDS AO ROLAR A TELA
+            const fadeElements = document.querySelectorAll('.fade-in-element');
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.classList.add('is-visible');
+                        }, index * 100);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            fadeElements.forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>
